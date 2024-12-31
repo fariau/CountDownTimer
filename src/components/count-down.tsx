@@ -4,14 +4,14 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components//ui/button";
 
-export default function countdown() {
+export default function Countdown() {
     const [duration, setDuration] = useState<number | string>("");
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isPaused, setIsPaused] = useState<boolean>(false);
     const timeRef = useRef<NodeJS.Timeout | null>(null);
 
-    const hundleSetDuration = (): void => {
+    const handleSetDuration = (): void => {
         if (typeof duration === "number" && duration > 0) {
             setTimeLeft(duration);
             setIsActive(false);
@@ -21,9 +21,9 @@ export default function countdown() {
             }
         }
     };
-    const hundleStart = (): void => {
+    const handleStart = (): void => {
         if (timeLeft > 0) {
-            setIsActive(true); -
+            setIsActive(true);
                 setIsPaused(false);
         }
     };
@@ -70,7 +70,8 @@ export default function countdown() {
     };
 
     const handleDurationChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setDuration(Number(e.target.value) || "");
+        const value = Number(e.target.value);
+        setDuration(value > 0 ? value : "");
     };
     return (
         // Container div for centering the content
@@ -85,17 +86,16 @@ export default function countdown() {
                 <div className="flex items-center mb-6">
                     <Input
                         type="number"
+                        min={1}
                         id="duration"
                         placeholder="Enter duration in seconds"
                         value={duration}
                         onChange={handleDurationChange}
-                        className="flex-1 mr-4 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                    />
+                        className="flex-1 mr-4 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"/>
                     <Button
-                        onClick={hundleSetDuration}
+                        onClick={handleSetDuration}
                         variant="outline"
-                        className="text-gray-800 dark:text-gray-200"
-                    >
+                        className="text-gray-800 dark:text-gray-200">
                         Set
                     </Button>
                 </div>
@@ -106,24 +106,21 @@ export default function countdown() {
                 {/* Buttons to start, pause, and reset the timer */}
                 <div className="flex justify-center gap-4">
                     <Button
-                        onClick={hundleStart}
+                        onClick={handleStart}
                         variant="outline"
-                        className="text-gray-800 dark:text-gray-200"
-                    >
+                        className="text-gray-800 dark:text-gray-200">
                         {isPaused ? "Resume" : "Start"}
                     </Button>
                     <Button
                         onClick={handlePause}
                         variant="outline"
-                        className="text-gray-800 dark:text-gray-200"
-                    >
+                        className="text-gray-800 dark:text-gray-200">
                         Pause
                     </Button>
                     <Button
                         onClick={handleReset}
                         variant="outline"
-                        className="text-gray-800 dark:text-gray-200"
-                    >
+                        className="text-gray-800 dark:text-gray-200">
                         Reset
                     </Button>
                 </div>
